@@ -1,0 +1,15 @@
+/* 【防屎山備註】：除了全域變體，嚴禁在此編寫長篇大論的 CSS 選取器。 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* 封裝商業系統常見的卡片外框，保持 UI 一致性 */
+  .biz-card {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  .biz-title {
+    @apply text-lg font-bold text-gray-800 border-l-4 border-primary pl-3 mb-4;
+  }
+}
