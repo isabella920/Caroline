@@ -1,0 +1,90 @@
+/* 1. 背景容器 */
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(160, 153, 153);
+}
+
+/* 2. 玻璃容器 */
+.container {
+  display: flex;
+  width: 760px;
+  height: 500px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 3. 左側動漫圖 */
+.leftSection {
+  width: 40%;
+  background-size: cover;
+  background-position: center;
+  background-image: url('https://i.pinimg.com/1200x/2f/32/94/2f32940f053338131a6ea40413fea147.jpg');
+}
+
+/* 4. 右側登入區 */
+.rightSection {
+  width: 60%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+.title {
+  margin-top: -0.5rem !important; 
+  margin-bottom: 3rem !important; 
+  /* 強化標題：增加字號與字重 */
+  font-size: 2rem !important; 
+  font-weight: 800 !important;
+  color: #9a696b !important;
+  letter-spacing: 0.15em;
+}
+
+/* 5. 漸層按鈕 */
+.loginBtn {
+  width: 100%;
+  height: 45px;
+  background: #9a696b !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: white !important;
+  font-weight: bold !important;
+  cursor: pointer;
+}
+
+/* 6. AntD 穿透樣式 - 徹底修正「兩條線」問題 */
+:global(.custom-form .ant-input),
+:global(.custom-form .ant-input-affix-wrapper) {
+  border: none !important; /* 移除四周邊框 */
+  border-bottom: 2px solid #9a696b !important; /* 只保留紫色底線 */
+  background: transparent !important; /* 背景透明 */
+  border-radius: 0 !important; /* 移除圓角 */
+  box-shadow: none !important; /* 移除點擊時的藍色陰影 */
+  padding-left: 0 !important; /* 讓文字對齊底線開頭 */
+}
+
+/* 修正密碼框的特殊容器 */
+:global(.custom-form .ant-input-affix-wrapper-focused),
+:global(.custom-form .ant-input-affix-wrapper:focus) {
+  box-shadow: none !important;
+  border-bottom: 2px solid #9a696b !important; /* 聚焦時線條加深 */
+}
+
+/* 修正輸入框內部的原生 input 標籤 */
+:global(.custom-form .ant-input-affix-wrapper > input.ant-input) {
+  border: none !important;
+  border-bottom: none !important; /* 內部 input 不要再畫線了 */
+}
+
+:global(.custom-form .ant-form-item-label > label) {
+  color: #9a696b !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+}

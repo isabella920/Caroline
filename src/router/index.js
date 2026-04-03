@@ -1,23 +1,16 @@
-// 【防屎山備註】：嚴禁將路由硬編碼 (Hardcode)。
-// 透過讀取 SIDE_MENU，未來新增第 10 個選單時，只需改 constants 檔案，這裡完全不用動。
-
 import { createRouter, createWebHistory } from 'vue-router';
 import { SIDE_MENU } from '../constants/menuConfig';
-import LayoutView from '../views/LayoutView.vue';
+import { authService } from '../services/authService';
 
-// 動態映射子路由
-const dynamicRoutes = SIDE_MENU.map(menu => {
-  // 將 HOME 獨立指向 Dashboard，其餘指向通用開發中模板
-  const component = menu.key === 'home'
-    ? () => import('../views/DashboardView.vue')
-    : () => import('../views/GenericPageView.vue');
-
-  return {
-    path: menu.route,
-    name: menu.key,
-    component
-  };
-});
+// 【防屎山備註】：必須確保這裡 import 的路徑與你實際檔案夾結構一致
+const dynamicRoutes = SIDE_MENU.map(menu => ({
+  path: menu.route,
+  name: menu.key,
+  // 這裡使用動態 import，如果檔案還沒寫，會報錯，請先確認 Views 資料夾內有這些檔案
+  component: menu.key === 'home' 
+    ? () => import('../views/DashboardView.vue') 
+    : () => import('../views/GenericPageView.vue')
+}));
 
 const routes = [
   { 
@@ -27,8 +20,8 @@ const routes = [
   },
   {
     path: '/',
-    component: LayoutView,
-    redirect: '/dashboard', // 預設導向首頁
+    component: () => import('../views/LayoutView.vue'),
+    redirect: '/dashboard',
     children: dynamicRoutes
   }
 ];
@@ -36,6 +29,17 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuth = authService.isAuthenticated();
+  if (to.name !== 'login' && !isAuth) {
+    next({ name: 'login' });
+  } else if (to.name === 'login' && isAuth) {
+    next({ path: '/' });
+  } else {
+    next();
+  }
 });
 
 export default router;

@@ -1,14 +1,8 @@
 <template>
   <a-layout class="min-h-screen">
-    <a-layout-sider
-      v-model:collapsed="collapsed"
-      collapsible
-      class="bg-gray-900 shadow-xl"
-    >
-      <div
-        class="h-16 flex items-center justify-center text-white font-bold text-xl tracking-wider"
-      >
-        {{ collapsed ? "SYS" : "人生系統 Lite" }}
+    <a-layout-sider v-model:collapsed="collapsed" collapsible class="bg-gray-900 shadow-xl">
+      <div class="h-16 flex items-center justify-center text-white font-bold text-xl tracking-wider">
+        {{ collapsed ? 'SYS' : '人生系統 Lite' }}
       </div>
       <a-menu
         v-model:selectedKeys="selectedKeys"
@@ -24,20 +18,14 @@
     </a-layout-sider>
 
     <a-layout>
-      <a-layout-header
-        class="bg-white px-6 shadow-sm flex justify-between items-center z-10"
-      >
-        <h2 class="text-xl font-semibold m-0 text-gray-700">
-          歡迎登入，總部指揮官
-        </h2>
+      <a-layout-header class="bg-white px-6 shadow-sm flex justify-between items-center z-10">
+        <h2 class="text-xl font-semibold m-0 text-gray-700">歡迎登入，總部指揮官</h2>
         <a-button type="text" danger @click="handleLogout" class="font-bold">
           登出系統
         </a-button>
       </a-layout-header>
 
-      <a-layout-content
-        class="m-6 p-6 bg-gray-50 rounded-lg shadow-inner overflow-y-auto"
-      >
+      <a-layout-content class="m-6 p-6 bg-gray-50 rounded-lg shadow-inner overflow-y-auto">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
             <component :is="Component" />
@@ -49,9 +37,11 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { SIDE_MENU } from "../constants/menuConfig";
+import { ref, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { message } from 'ant-design-vue';
+import { SIDE_MENU } from '../constants/menuConfig';
+import { authService } from '../services/authService'; // 務必導入
 
 const router = useRouter();
 const route = useRoute();
@@ -59,22 +49,22 @@ const route = useRoute();
 const collapsed = ref(false);
 const selectedKeys = ref([route.path]);
 
-// 【防屎山備註】：必須監聽路由變化來更新選單高亮。
-// 確保使用者按「上一頁」時，側邊欄的高亮狀態能正確同步 (Single Source of Truth)。
-watch(
-  () => route.path,
-  (newPath) => {
-    selectedKeys.value = [newPath];
-  },
-);
+// 監聽路由變化，保持選單高亮一致
+watch(() => route.path, (newPath) => {
+  selectedKeys.value = [newPath];
+});
 
 const handleMenuClick = ({ key }) => {
   router.push(key);
 };
 
 const handleLogout = () => {
-  // 實務上這裡會呼叫 authService 清除 Token
-  router.push("/login");
+  // 1. 清除憑證
+  authService.clearToken(); 
+  // 2. 提示使用者
+  message.info('已安全登出系統');
+  // 3. 跳轉回登入頁
+  router.push('/login');
 };
 </script>
 
@@ -83,6 +73,7 @@ const handleLogout = () => {
 .fade-leave-active {
   transition: opacity 0.2s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

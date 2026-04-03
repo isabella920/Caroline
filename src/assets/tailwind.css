@@ -1,15 +1,12 @@
-/* 【防屎山備註】：除了全域變體，嚴禁在此編寫長篇大論的 CSS 選取器。 */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer components {
-  /* 封裝商業系統常見的卡片外框，保持 UI 一致性 */
-  .biz-card {
-    @apply bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow;
-  }
+/* 在這裡定義你的「人生系統」專屬顏色 */
+@theme {
+  --color-primary: #1890ff;    /* Ant Design 藍 */
+  --color-success: #52c41a;    /* 庫存充足綠 */
+  --color-warning: #faad14;    /* 預警橘 */
+  --color-danger: #ff4d4f;     /* 缺貨紅 */
+  --color-business: #262626;   /* 深色文字 */
   
-  .biz-title {
-    @apply text-lg font-bold text-gray-800 border-l-4 border-primary pl-3 mb-4;
-  }
+  --spacing-safe: 1.5rem;      /* 標準安全邊距 */
 }

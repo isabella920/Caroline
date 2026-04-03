@@ -1,17 +1,29 @@
-// 【防屎山備註】：Service 層絕對禁止操作 DOM 或依賴 Vue 組件。
-// 這裡只負責純邏輯驗證，回傳布林值或 Throw Error。
+const AUTH_KEY = 'life_system_token';
 
-/**
- * 驗證登入憑證
- * @param {string} inputUser - 使用者輸入帳號
- * @param {string} inputPass - 使用者輸入密碼
- * @param {string} validUser - 系統正確帳號
- * @param {string} validPass - 系統正確密碼
- * @returns {boolean} 登入是否成功
- */
-export const verifyLogin = (inputUser, inputPass, validUser, validPass) => {
-  if (!inputUser || !inputPass) {
-    throw new Error('帳號與密碼不得為空');
+// 【防屎山備註】：這裡不包含任何 UI 提示 (message/alert)，
+// 僅負責數據的存取，確保邏輯可以在非瀏覽器環境下測試。
+export const authService = {
+  // 檢查是否已登入
+  isAuthenticated() {
+    return !!localStorage.getItem(AUTH_KEY);
+  },
+
+  // 執行登入：儲存憑證
+  setToken(token) {
+    localStorage.setItem(AUTH_KEY, token);
+  },
+
+  // 執行登出：清除憑證
+  clearToken() {
+    localStorage.removeItem(AUTH_KEY);
+  },
+
+  // 模擬驗證邏輯
+  async verifyLogin(username, password, validUser, validPass) {
+    if (username === validUser && password === validPass) {
+      this.setToken('mock-jwt-token-' + Date.now());
+      return true;
+    }
+    return false;
   }
-  return inputUser === validUser && inputPass === validPass;
 };
