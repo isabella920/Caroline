@@ -76,13 +76,36 @@ const toggleCollapsed = () => {
   border: none !important;
   z-index: 100;
   overflow: hidden;
+
+  background: #9a696b !important;
+  margin: 16px !important;
+  border-radius: 24px !important;
+  
+  /* --- 解決長度不一的核心程式碼 --- */
+  /* 強制高度等於視窗高度減去上下 Margin (16px * 2 = 32px) */
+  height: calc(100vh - 32px) !important; 
+  
+  /* 防止被內容撐開或收縮 */
+  min-height: calc(100vh - 32px) !important; 
+  max-height: calc(100vh - 32px) !important; 
+  
+  /* 確保內部佈局是垂直排列 */
+  display: flex !important;
+  flex-direction: column !important;
+  /* ------------------------------ */
+
+  box-shadow: 8px 0 24px rgba(154, 105, 107, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: none !important;
+  z-index: 100;
+  overflow: hidden;
 }
 
 .sidebar-inner {
-  height: 100%;
+height: 100%;
   display: flex;
   flex-direction: column;
-  position: relative;
+  justify-content: space-between; /* 讓選單在中間，Trigger 在底部 */
 }
 
 .logo-box {
@@ -109,10 +132,11 @@ const toggleCollapsed = () => {
 }
 
 .vibe-menu {
+flex: 1; 
+  overflow-y: auto;
+  overflow-x: hidden;
   background: transparent !important;
   border: none !important;
-  padding: 10px 8px !important;
-  flex: 1; /* 佔滿剩餘空間 */
 }
 
 /* 選中項目 */
