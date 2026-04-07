@@ -57,17 +57,55 @@
   color: white !important;
   font-weight: bold !important;
   cursor: pointer;
+  transition: opacity 0.3s;
 }
 
-/* 6. AntD 穿透樣式 - 徹底修正「兩條線」問題 */
+.loginBtn:hover {
+  opacity: 0.9;
+}
+
+/* 6. AntD 穿透樣式 - 徹底修正文字顏色與兩條線 BUG */
+
+/* ✅ 1. 基礎框架：移除邊框、背景透明、設定字色 */
 :global(.custom-form .ant-input),
 :global(.custom-form .ant-input-affix-wrapper) {
-  border: none !important; /* 移除四周邊框 */
-  border-bottom: 2px solid #9a696b !important; /* 只保留紫色底線 */
-  background: transparent !important; /* 背景透明 */
-  border-radius: 0 !important; /* 移除圓角 */
-  box-shadow: none !important; /* 移除點擊時的藍色陰影 */
-  padding-left: 0 !important; /* 讓文字對齊底線開頭 */
+  border: none !important;
+  border-bottom: 2px solid #9a696b !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 8px 0 !important;
+  /* 強制手動輸入文字顏色 */
+  color: #9a696b !important; 
+}
+:global(.custom-form .ant-input-password-icon),
+:global(.custom-form .ant-input-prefix),
+:global(.custom-form .ant-input-suffix) {
+  color: #9a696b !important;
+}
+
+/* 🚀 核心修復：處理瀏覽器自動填入 (Autofill) 導致的反白 BUG */
+:global(.custom-form .ant-input:-webkit-autofill),
+:global(.custom-form .ant-input:-webkit-autofill:hover),
+:global(.custom-form .ant-input:-webkit-autofill:focus),
+:global(.custom-form .ant-input-affix-wrapper:-webkit-autofill),
+:global(.custom-form .ant-input-affix-wrapper:-webkit-autofill:hover),
+:global(.custom-form .ant-input-affix-wrapper:-webkit-autofill:focus) {
+  
+  /* 1. 移除背景色：利用超大範圍的內陰影覆蓋，背景色設為透明 */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  /* 2. 背景過渡延遲：讓瀏覽器無法在短時間內塗上顏色 */
+  transition: background-color 5000s ease-in-out 0s;
+  /* 3. 強制設定文字顏色，對齊你原本的配色方案 */
+  -webkit-text-fill-color: #9a696b !important;
+  /* 4. 確保底線依然存在 */
+  border-bottom: 2px solid #9a696b !important;
+}
+
+/* 針對 AntD Input 內部的原生 input 標籤也補上一層防護 */
+:global(.custom-form input:-webkit-autofill) {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: #9a696b !important;
 }
 
 /* 修正密碼框的特殊容器 */
