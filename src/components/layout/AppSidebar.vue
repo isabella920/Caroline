@@ -1,27 +1,30 @@
 <script setup>
-import { ref, watch } from 'vue';
-import * as Icons from '@ant-design/icons-vue'; // 引入所有圖示，確保動態渲染
-import { SIDE_MENU } from '../../constants/menuConfig';
+import { ref, watch } from 'vue'
+import * as Icons from '@ant-design/icons-vue' // 引入所有圖示，確保動態渲染
+import { SIDE_MENU } from '../../constants/menuConfig'
 
 // 【職責分離】：只接收狀態，不直接修改外部狀態
 const props = defineProps({
   collapsed: { type: Boolean, required: true },
-  currentRoute: { type: String, required: true }
-});
+  currentRoute: { type: String, required: true },
+})
 
-const emit = defineEmits(['update:collapsed', 'navigate']);
+const emit = defineEmits(['update:collapsed', 'navigate'])
 
-const internalSelectedKeys = ref([props.currentRoute]);
+const internalSelectedKeys = ref([props.currentRoute])
 
 // 監聽路由同步
-watch(() => props.currentRoute, (newVal) => {
-  internalSelectedKeys.value = [newVal];
-});
+watch(
+  () => props.currentRoute,
+  (newVal) => {
+    internalSelectedKeys.value = [newVal]
+  },
+)
 
 // 切換縮進的邏輯
 const toggleCollapsed = () => {
-  emit('update:collapsed', !props.collapsed);
-};
+  emit('update:collapsed', !props.collapsed)
+}
 </script>
 
 <template>
@@ -55,7 +58,9 @@ const toggleCollapsed = () => {
       </a-menu>
 
       <div class="custom-trigger" @click="toggleCollapsed">
-        <component :is="collapsed ? Icons.MenuUnfoldOutlined : Icons.MenuFoldOutlined" />
+        <component
+          :is="collapsed ? Icons.MenuUnfoldOutlined : Icons.MenuFoldOutlined"
+        />
       </div>
     </div>
   </a-layout-sider>
@@ -80,15 +85,15 @@ const toggleCollapsed = () => {
   background: #9a696b !important;
   margin: 16px !important;
   border-radius: 24px !important;
-  
+
   /* --- 解決長度不一的核心程式碼 --- */
   /* 強制高度等於視窗高度減去上下 Margin (16px * 2 = 32px) */
-  height: calc(100vh - 32px) !important; 
-  
+  height: calc(100vh - 32px) !important;
+
   /* 防止被內容撐開或收縮 */
-  min-height: calc(100vh - 32px) !important; 
-  max-height: calc(100vh - 32px) !important; 
-  
+  min-height: calc(100vh - 32px) !important;
+  max-height: calc(100vh - 32px) !important;
+
   /* 確保內部佈局是垂直排列 */
   display: flex !important;
   flex-direction: column !important;
@@ -102,7 +107,7 @@ const toggleCollapsed = () => {
 }
 
 .sidebar-inner {
-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* 讓選單在中間，Trigger 在底部 */
@@ -132,7 +137,7 @@ height: 100%;
 }
 
 .vibe-menu {
-flex: 1; 
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   background: transparent !important;

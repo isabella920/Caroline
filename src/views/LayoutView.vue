@@ -9,12 +9,15 @@ const route = useRoute();
 const collapsed = ref(false);
 
 const handleNavigation = (path) => {
-  router.push(path);
+  // 【建議】：如果 path 不帶斜線，補上斜線確保是絕對路徑
+  const targetPath = path.startsWith('/') ? path : `/${path}`;
+  router.push(targetPath);
 };
 
 const handleLogout = () => {
   authService.clearToken();
-  router.push('/login');
+  // 使用絕對路徑跳轉，確保不受當前路由深度影響
+  router.push('/login'); 
 };
 </script>
 
